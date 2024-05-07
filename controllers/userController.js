@@ -33,6 +33,19 @@ module.exports = {
             console.log(error);
         }
     },
- 
+    postUserLogin:async(req,res)=>{
+        const {email,password} = req.body
+        const exisistUser = await userModel.findOne({ email })
+        if(!exisistUser){
+            return res.json('User does not exist ')
+        }else{
+            const passwordCheck = await bcrypt.compare(password,exisistUser.password)
+            if(passwordCheck){
+                res.status(200).json('login success')
+            }else{
+                res.status(400).json('Invalid password')
+            }
+        }
+    }
 
 }
